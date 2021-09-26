@@ -1,1 +1,1 @@
-rootProject.name = "test-ide-pugin"
+rootProject.name = "test-ide-plugin"

@@ -1,7 +1,7 @@
-package com.github.ilusha2012.testidepugin.services
+package com.github.ilusha2012.testideplugin.services
 
 import com.intellij.openapi.project.Project
-import com.github.ilusha2012.testidepugin.MyBundle
+import com.github.ilusha2012.testideplugin.MyBundle
 
 class MyProjectService(project: Project) {
 

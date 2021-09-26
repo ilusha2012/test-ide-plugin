@@ -1,6 +1,6 @@
 <!-- Keep a Changelog guide -> https://keepachangelog.com -->
 
-# test-ide-pugin Changelog
+# test-ide-plugin Changelog
 
 ## [Unreleased]
 ### Added

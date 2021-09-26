@@ -1,4 +1,4 @@
-package com.github.ilusha2012.testidepugin
+package com.github.ilusha2012.testideplugin
 
 import com.intellij.DynamicBundle
 import org.jetbrains.annotations.NonNls
