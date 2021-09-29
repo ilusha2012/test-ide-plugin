@@ -1,18 +1,20 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <id>com.github.ilusha2012.testideplugin</id>
-    <name>test-ide-plugin</name>
+    <name>Test Ide</name>
     <vendor>ilusha2012</vendor>
 
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.ilusha2012.testideplugin.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.ilusha2012.testideplugin.services.MyProjectService"/>
+<!--        <applicationService serviceImplementation="com.github.ilusha2012.testideplugin.services.MyApplicationService"/>-->
+<!--        <projectService serviceImplementation="com.github.ilusha2012.testideplugin.services.MyProjectService"/>-->
+        <toolWindow id="XML Tree" secondary="true" icon="AllIcons.General.Modified" anchor="right"
+                    factoryClass="com.github.ilusha2012.testideplugin.tool.XMLTreeToolWindowFactory"/>
     </extensions>
 
-    <applicationListeners>
-        <listener class="com.github.ilusha2012.testideplugin.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </applicationListeners>
+<!--    <applicationListeners>-->
+<!--        <listener class="com.github.ilusha2012.testideplugin.listeners.MyProjectManagerListener"-->
+<!--                  topic="com.intellij.openapi.project.ProjectManagerListener"/>-->
+<!--    </applicationListeners>-->
 </idea-plugin>
