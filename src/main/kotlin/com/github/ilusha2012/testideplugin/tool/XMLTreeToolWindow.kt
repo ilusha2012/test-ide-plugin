@@ -7,4 +7,7 @@ import javax.swing.JTree
 class XMLTreeToolWindow(toolWindow: ToolWindow) {
     var xmlTree: JTree? = null
     var content: JPanel? = null
+
+
+
 }

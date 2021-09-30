@@ -2,8 +2,8 @@ package com.github.ilusha2012.testideplugin.listeners
 
 import com.github.ilusha2012.testideplugin.services.XmlTreeService
 import com.intellij.codeInsight.daemon.impl.EditorTrackerListener
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.fileEditor.FileDocumentManager
 
 class CurrentDocumentSelectListener : EditorTrackerListener {
 
@@ -15,7 +15,14 @@ class CurrentDocumentSelectListener : EditorTrackerListener {
         val project = activeEditors[0].project
         val doc = activeEditors[0].document
 
-        val xmlParserService = project?.getService(XmlTreeService::class.java) ?: return
-        xmlParserService.updateToolWindowContent(doc)
+        if (project == null) {
+            return
+        }
+
+        val xmlTreeService = project.getService(XmlTreeService::class.java) ?: return
+        ApplicationManager.getApplication().runReadAction {
+            xmlTreeService.updateToolWindowContent(doc)
+        }
+
     }
 }

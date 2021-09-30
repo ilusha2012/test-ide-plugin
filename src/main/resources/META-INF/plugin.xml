@@ -15,6 +15,8 @@
     <projectListeners>
         <listener class="com.github.ilusha2012.testideplugin.listeners.CurrentDocumentSelectListener"
                   topic="com.intellij.codeInsight.daemon.impl.EditorTrackerListener"/>
+        <listener class="com.github.ilusha2012.testideplugin.listeners.DocumentEditListener"
+                  topic="com.intellij.openapi.fileEditor.FileDocumentManagerListener"/>
     </projectListeners>
 
 </idea-plugin>
