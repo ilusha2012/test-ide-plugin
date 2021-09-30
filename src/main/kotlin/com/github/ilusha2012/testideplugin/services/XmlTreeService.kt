@@ -28,11 +28,18 @@ class XmlTreeService(private val project: Project) {
     var tree: DefaultTreeModel? = null
     var file: VirtualFile? = null
 
+    fun updateToolWindowContentFromCurrentFile() {
+        updateToolWindowContent()
+    }
+
     fun updateToolWindowContent(document: Document) {
         file = FileDocumentManager.getInstance().getFile(document)
+        updateToolWindowContent()
+    }
+
+    private fun updateToolWindowContent() {
         val type = file?.fileType
         val toolWindow = ToolWindowManager.getInstance(project).getToolWindow(PLUGIN_NAME) ?: return
-
         toolWindow.contentManager.removeAllContents(true)
 
         if (type?.name != TYPE_SUPPORT) {

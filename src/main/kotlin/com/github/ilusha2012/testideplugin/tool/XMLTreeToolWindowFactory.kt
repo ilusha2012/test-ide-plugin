@@ -16,7 +16,7 @@ class XMLTreeToolWindowFactory : ToolWindowFactory {
      * @param toolWindow current tool window
      */
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
-        val xmlTreeToolWindow = XMLTreeToolWindow(toolWindow)
+        val xmlTreeToolWindow = XMLTreeToolWindow(project, toolWindow)
 
         val xmlTreeService = project.getService(XmlTreeService::class.java)
         xmlTreeToolWindow.xmlTree?.model = xmlTreeService.tree
