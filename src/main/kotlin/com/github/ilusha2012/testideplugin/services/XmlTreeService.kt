@@ -1,45 +1,59 @@
 package com.github.ilusha2012.testideplugin.services
 
 import com.github.ilusha2012.testideplugin.tool.XMLTreeToolWindowFactory
+import com.intellij.openapi.editor.Document
+import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindowManager
-import java.io.StringReader
+import java.io.InputStream
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
 import javax.xml.parsers.DocumentBuilderFactory
-import org.w3c.dom.Document
 import org.w3c.dom.Node
 import org.w3c.dom.NodeList
-import org.xml.sax.InputSource
+import org.xml.sax.SAXParseException
 
 
 class XmlTreeService(private val project: Project) {
 
-    val PLUGIN_ID: String = "XMLTree"
-    val PLUGIN_NAME: String = "XML Tree"
+    companion object {
+        const val PLUGIN_ID: String = "XMLTree"
+        const val PLUGIN_NAME: String = "XML Tree"
+        const val TYPE_SUPPORT: String = "XML"
+    }
 
     var tree: DefaultTreeModel? = null
 
-    fun updateTree(path: String? = null) {
-        if (path == null) {
+    fun updateTree(inputStream: InputStream? = null) {
+        if (inputStream == null) {
             return
         }
         val factory = DocumentBuilderFactory.newInstance()
         val builder = factory.newDocumentBuilder()
-        val inputSource = InputSource(StringReader(path))
-        val doc: Document = builder.parse(inputSource)
+        val doc = try {
+            builder.parse(inputStream)
+        } catch (e: SAXParseException) {
+            null
+        } ?: return
+
         val root: Node = doc.documentElement as Node
 
         tree = DefaultTreeModel(builtTreeNode(root))
     }
 
-    fun updateToolWindowContent() {
-        val toolWindow = ToolWindowManager.getInstance(project).getToolWindow(PLUGIN_NAME)
+    fun updateToolWindowContent(document: Document) {
+        val file = FileDocumentManager.getInstance().getFile(document)
+        val type = file?.fileType
+        val toolWindow = ToolWindowManager.getInstance(project).getToolWindow(PLUGIN_NAME) ?: return
 
-        if (toolWindow != null) {
-            toolWindow.contentManager.removeAllContents(true)
-            XMLTreeToolWindowFactory().createToolWindowContent(project, toolWindow)
+        toolWindow.contentManager.removeAllContents(true)
+
+        if (type?.name != TYPE_SUPPORT) {
+            return
         }
+
+        updateTree(file.inputStream)
+        XMLTreeToolWindowFactory().createToolWindowContent(project, toolWindow)
     }
 
     private fun builtTreeNode(root: Node): DefaultMutableTreeNode {
