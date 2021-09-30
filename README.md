@@ -7,11 +7,6 @@ Tree viewer for xml files.
 <!-- Plugin description end -->
 
 ## Installation
-
-- Using IDE built-in plugin system:
-  
-  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "test-ide-plugin"</kbd> >
-  <kbd>Install Plugin</kbd>
   
 - Manually:
 
