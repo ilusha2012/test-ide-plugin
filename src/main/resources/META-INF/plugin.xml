@@ -7,14 +7,14 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-<!--        <applicationService serviceImplementation="com.github.ilusha2012.testideplugin.services.MyApplicationService"/>-->
-<!--        <projectService serviceImplementation="com.github.ilusha2012.testideplugin.services.MyProjectService"/>-->
+        <projectService serviceImplementation="com.github.ilusha2012.testideplugin.services.XmlTreeService"/>
         <toolWindow id="XML Tree" secondary="true" icon="AllIcons.General.Modified" anchor="right"
                     factoryClass="com.github.ilusha2012.testideplugin.tool.XMLTreeToolWindowFactory"/>
     </extensions>
 
-<!--    <applicationListeners>-->
-<!--        <listener class="com.github.ilusha2012.testideplugin.listeners.MyProjectManagerListener"-->
-<!--                  topic="com.intellij.openapi.project.ProjectManagerListener"/>-->
-<!--    </applicationListeners>-->
+    <projectListeners>
+        <listener class="com.github.ilusha2012.testideplugin.listeners.CurrentDocumentSelectListener"
+                  topic="com.intellij.codeInsight.daemon.impl.EditorTrackerListener"/>
+    </projectListeners>
+
 </idea-plugin>

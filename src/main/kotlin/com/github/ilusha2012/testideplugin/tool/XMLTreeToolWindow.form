@@ -16,6 +16,10 @@
         </constraints>
         <properties>
           <dragEnabled value="true"/>
+          <dropMode value="INSERT"/>
+          <editable value="true"/>
+          <expandsSelectedPaths value="false"/>
+          <rootVisible value="true"/>
         </properties>
       </component>
     </children>
