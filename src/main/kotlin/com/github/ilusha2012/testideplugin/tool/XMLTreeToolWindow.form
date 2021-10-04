@@ -19,6 +19,7 @@
           <dropMode value="ON_OR_INSERT"/>
           <editable value="false"/>
           <expandsSelectedPaths value="false"/>
+          <largeModel value="false"/>
           <rootVisible value="true"/>
         </properties>
       </component>
