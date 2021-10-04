@@ -14,16 +14,11 @@ class XMLTreeToolWindow(project: Project, toolWindow: ToolWindow) {
     var xmlTree: JTree? = null
     var content: JPanel? = null
     var refreshBtn: JButton? = null
-    var applyBtn: JButton? = null
 
     init {
         refreshBtn?.addActionListener { e ->
-            val xmlTreeService = project.getService(XmlTreeService::class.java)
+            val xmlTreeService = XmlTreeService.getInstance(project)
             xmlTreeService.updateToolWindowContentFromCurrentFile()
-        }
-
-        applyBtn?.addActionListener { e ->
-            TODO("Logic for saving tree to file")
         }
 
         xmlTree?.cellRenderer = SmartPsiElementCellRenderer()

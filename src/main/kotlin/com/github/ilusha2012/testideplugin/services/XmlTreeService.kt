@@ -25,6 +25,8 @@ class XmlTreeService(private val project: Project) {
 
     companion object {
         const val PLUGIN_NAME: String = "XML Tree"
+
+        fun getInstance(project: Project): XmlTreeService = project.getService(XmlTreeService::class.java)
     }
 
     var tree: DefaultTreeModel? = null
@@ -72,24 +74,25 @@ class XmlTreeService(private val project: Project) {
 
         val nodeList = node.children
         for (element in nodeList) {
-            if (element.isPhysical && element.elementType == XmlElementType.XML_TAG) {
-                val tag = element as XmlTag
-                val srcItem = tag.getAttributeValue("src")
+            if (element.elementType != XmlElementType.XML_TAG) {
+                continue
+            }
+            val tag = element as XmlTag
+            val srcItem = tag.getAttributeValue("src")
 
-                if (srcItem != null) {
-                    val file = VirtualFileManager.getInstance()
-                        .findFileByNioPath(Path.of("${file?.parent?.canonicalPath}/${srcItem}"))
-                        ?: continue
-                    val psiElement = PsiManager.getInstance(project).findFile(file)?.createSmartPointer()?.element
-                        ?: continue
+            if (srcItem != null) {
+                val file = VirtualFileManager.getInstance()
+                    .findFileByNioPath(Path.of("${file?.parent?.canonicalPath}/${srcItem}"))
+                    ?: continue
+                val psiElement = PsiManager.getInstance(project).findFile(file)?.createSmartPointer()?.element
+                    ?: continue
 
-                    if (psiElement is XmlFile) {
-                        dmtNode.add(builtTree(psiElement.rootTag!!))
-                    }
-
-                } else {
-                    dmtNode.add(builtTree(element))
+                if (psiElement is XmlFile) {
+                    dmtNode.add(builtTree(psiElement.rootTag!!))
                 }
+
+            } else {
+                dmtNode.add(builtTree(element))
             }
         }
         return dmtNode

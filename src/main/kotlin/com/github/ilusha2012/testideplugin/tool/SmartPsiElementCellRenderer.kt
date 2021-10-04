@@ -46,5 +46,4 @@ class SmartPsiElementCellRenderer : DefaultTreeCellRenderer() {
         return this
     }
 
-
 }

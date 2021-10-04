@@ -19,10 +19,9 @@ class CurrentDocumentSelectListener : EditorTrackerListener {
             return
         }
 
-        val xmlTreeService = project.getService(XmlTreeService::class.java) ?: return
+        val xmlTreeService = XmlTreeService.getInstance(project)
         ApplicationManager.getApplication().runReadAction {
             xmlTreeService.updateToolWindowContent(doc)
         }
-
     }
 }

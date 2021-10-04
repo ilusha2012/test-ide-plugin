@@ -1,5 +1,13 @@
 package com.github.ilusha2012.testideplugin.tool
 
+import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.application.ModalityState
+import com.intellij.openapi.command.WriteCommandAction.runWriteCommandAction
+import com.intellij.psi.PsiElement
+import com.intellij.psi.SmartPsiElementPointer
+import com.intellij.psi.util.elementType
+import com.intellij.psi.xml.XmlElementType
+import com.intellij.refactoring.suggested.createSmartPointer
 import java.awt.datatransfer.DataFlavor
 import java.awt.datatransfer.Transferable
 import java.awt.datatransfer.UnsupportedFlavorException
@@ -9,7 +17,6 @@ import javax.swing.JTree
 import javax.swing.TransferHandler
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
-import javax.swing.tree.TreeNode
 import javax.swing.tree.TreePath
 
 
@@ -109,8 +116,11 @@ internal class TreeTransferHandler : TransferHandler() {
     }
 
     /** Defensive copy used in createTransferable.  */
-    private fun copy(node: TreeNode): DefaultMutableTreeNode {
-        return DefaultMutableTreeNode(node)
+    private fun copy(node: DefaultMutableTreeNode): DefaultMutableTreeNode {
+        val new = DefaultMutableTreeNode(node)
+        val psiElement = (node.userObject as SmartPsiElementPointer<PsiElement>).element?.copy()
+        new.userObject = psiElement?.createSmartPointer()
+        return new
     }
 
     override fun exportDone(source: JComponent, data: Transferable, action: Int) {
@@ -120,6 +130,13 @@ internal class TreeTransferHandler : TransferHandler() {
             // Remove nodes saved in nodesToRemove in createTransferable.
             for (i in nodesToRemove.indices) {
                 model.removeNodeFromParent(nodesToRemove[i])
+
+                val element = (nodesToRemove[i].userObject as SmartPsiElementPointer<PsiElement>).element
+                ApplicationManager.getApplication().invokeLater({
+                    runWriteCommandAction(element?.project) {
+                        element?.delete()
+                    }
+                }, ModalityState.stateForComponent(source))
             }
         }
     }
@@ -128,7 +145,7 @@ internal class TreeTransferHandler : TransferHandler() {
         return COPY_OR_MOVE
     }
 
-    override fun importData(support: TransferSupport): Boolean {
+    override fun importData(support: TransferHandler.TransferSupport): Boolean {
         if (!canImport(support)) {
             return false
         }
@@ -156,6 +173,17 @@ internal class TreeTransferHandler : TransferHandler() {
         }
         // Add data to model.
         for (i in nodes!!.indices) {
+            val element = (nodes[i]?.userObject as SmartPsiElementPointer<PsiElement>).element
+            val parentEl = (parent.userObject as SmartPsiElementPointer<PsiElement>).element
+            if (element != null && parentEl != null) {
+                runWriteCommandAction(parentEl.project) {
+                    parentEl.addBefore(
+                        element,
+                        parentEl.children.filter { it.elementType == XmlElementType.XML_TAG }[index]
+                    )
+                }
+            }
+
             model.insertNodeInto(nodes[i], parent, index++)
         }
         return true
